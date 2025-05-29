@@ -1,0 +1,11 @@
+.pio/
+.vscode/
+.DS_Store
+*.pyc
+**/*.elf
+**/*.hex
+**/*.bin
+**/*.map
+/.clangd/
+/firmware/
+/.idea/
