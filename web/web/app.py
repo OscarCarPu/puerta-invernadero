@@ -127,8 +127,8 @@ def api_lecturas_recientes():
     return jsonify(data)
 
 
-@app.route("/lectura", methods=["POST"])
-def lectura():
+@app.route("/api/add_lectura", methods=["POST"])
+def add_lectura():
     """Endpoint para recibir una nueva lectura de temperatura y humedad"""
     try:
         # Check content type
@@ -200,4 +200,4 @@ def lectura():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=8000)

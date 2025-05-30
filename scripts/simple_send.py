@@ -18,7 +18,9 @@ def send_reading():
 
     try:
         response = requests.post(
-            "http://localhost:5000/lectura", json=data, headers={"Content-Type": "application/json"}
+            "http://192.168.1.132:8000/api/add_lectura",
+            json=data,
+            headers={"Content-Type": "application/json"},
         )
 
         if response.status_code == 201:

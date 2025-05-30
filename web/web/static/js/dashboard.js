@@ -96,14 +96,8 @@ function updateChart(data) {
     x: madridDates,
     y: data.temperaturas,
     type: 'scatter',
-    mode: 'lines+markers+text',
+    mode: 'lines+markers',
     name: 'Temperatura (°C)',
-    text: data.temperaturas.map((temp) => temp.toFixed(1) + '°C'),
-    textposition: 'top center',
-    textfont: {
-      size: 10,
-      color: '#ff6b6b',
-    },
     line: {
       color: '#ff6b6b',
       width: 3,
@@ -119,14 +113,8 @@ function updateChart(data) {
     x: madridDates,
     y: data.humedades,
     type: 'scatter',
-    mode: 'lines+markers+text',
+    mode: 'lines+markers',
     name: 'Humedad (%)',
-    text: data.humedades.map((hum) => hum.toFixed(1) + '%'),
-    textposition: 'bottom center',
-    textfont: {
-      size: 10,
-      color: '#4ecdc4',
-    },
     line: {
       color: '#4ecdc4',
       width: 3,
@@ -137,6 +125,17 @@ function updateChart(data) {
     },
     yaxis: 'y2',
   };
+
+  // Calculate y-axis ranges with 10% buffer
+  const tempMin = Math.min(...data.temperaturas);
+  const tempMax = Math.max(...data.temperaturas);
+  const tempRange = tempMax - tempMin;
+  const tempBuffer = tempRange * 0.1;
+
+  const humMin = Math.min(...data.humedades);
+  const humMax = Math.max(...data.humedades);
+  const humRange = humMax - humMin;
+  const humBuffer = humRange * 0.1;
 
   const layout = {
     title: {
@@ -158,6 +157,7 @@ function updateChart(data) {
       tickfont: {color: '#ff6b6b'},
       gridcolor: '#e9ecef',
       side: 'left',
+      range: [tempMin - tempBuffer, tempMax + tempBuffer],
     },
     yaxis2: {
       title: 'Humedad (%)',
@@ -166,6 +166,7 @@ function updateChart(data) {
       overlaying: 'y',
       side: 'right',
       gridcolor: '#e9ecef',
+      range: [humMin - humBuffer, humMax + humBuffer],
     },
     legend: {
       x: 0,
@@ -196,7 +197,7 @@ function updateChart(data) {
     Plotly.newPlot('evolutionChart', [trace1, trace2], layout, config);
     chart = true;
   } else {
-    Plotly.redraw('evolutionChart', [trace1, trace2], layout);
+    Plotly.react('evolutionChart', [trace1, trace2], layout, config);
   }
 }
 
