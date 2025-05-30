@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lecturas Recientes - Invernadero</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>
+    <!-- Custom CSS -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/dashboard.css') }}"
+    />
+  </head>
+  <body class="bg-light">
+    <div class="container py-4">
+      <div class="row">
+        <div class="col">
+          <h1 class="text-center text-primary mb-4">
+            <i class="fas fa-seedling me-2"></i>Invernadero - Monitoreo en
+            Tiempo Real
+          </h1>
+        </div>
+      </div>
+
+      <!-- Valores actuales grandes -->
+      <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+          <div class="card metric-card temp-card h-100 position-relative">
+            <div class="status-indicator" id="tempStatus"></div>
+            <div class="card-body text-center">
+              <div class="row align-items-center">
+                <div class="col-3">
+                  <i class="fas fa-thermometer-half metric-icon"></i>
+                </div>
+                <div class="col-9">
+                  <div class="metric-value" id="currentTemp">--</div>
+                  <div class="metric-label">°C</div>
+                  <div class="text-white-50">Temperatura</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="card metric-card humidity-card h-100 position-relative">
+            <div class="status-indicator" id="humidityStatus"></div>
+            <div class="card-body text-center">
+              <div class="row align-items-center">
+                <div class="col-3">
+                  <i class="fas fa-tint metric-icon"></i>
+                </div>
+                <div class="col-9">
+                  <div class="metric-value" id="currentHumidity">--</div>
+                  <div class="metric-label">%</div>
+                  <div class="text-white-50">Humedad</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gráfico evolutivo -->
+      <div class="row">
+        <div class="col-12">
+          <div class="chart-container">
+            <h3 class="text-center mb-3">
+              <i class="fas fa-chart-line me-2"></i>Evolución de la última hora
+            </h3>
+            <div id="evolutionChart" style="height: 400px"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla de lecturas recientes -->
+      <div class="row mt-4">
+        <div class="col">
+          <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0">
+                <i class="fas fa-list me-2"></i>Lecturas de la Última Hora
+              </h5>
+            </div>
+            <div class="card-body">
+              {% if data and data.temperaturas and data.humedades and
+              data.fechas %}
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>
+                        <i class="fas fa-calendar-alt me-1"></i>Fecha y Hora
+                      </th>
+                      <th>
+                        <i class="fas fa-thermometer-half me-1"></i>Temperatura
+                        (°C)
+                      </th>
+                      <th><i class="fas fa-tint me-1"></i>Humedad (%)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="readingsTable">
+                    {% for i in range(data.temperaturas|length) %}
+                    <tr>
+                      <td>{{ data.fechas[i] }}</td>
+                      <td>
+                        <span class="badge bg-danger rounded-pill">
+                          {{ "%.1f"|format(data.temperaturas[i]) }}°C
+                        </span>
+                      </td>
+                      <td>
+                        <span class="badge bg-info rounded-pill">
+                          {{ "%.1f"|format(data.humedades[i]) }}%
+                        </span>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              {% else %}
+              <div class="alert alert-warning text-center" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                No hay lecturas disponibles
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Información de última actualización -->
+      <div class="row mt-4">
+        <div class="col-12 text-center">
+          <small class="text-muted">
+            <i class="fas fa-clock me-1"></i>Última actualización:
+            <span id="lastUpdate">--</span>
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+  </body>
+</html>

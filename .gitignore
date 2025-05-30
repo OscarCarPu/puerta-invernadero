@@ -9,3 +9,6 @@
 /.clangd/
 /firmware/
 /.idea/
+.env
+venv/
+node_modules

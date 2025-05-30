@@ -1,0 +1,81 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        name: remove trailing whitespace
+      - id: end-of-file-fixer
+        name: ensure file ends with a newline
+      - id: check-yaml
+        name: check YAML files
+      - id: check-added-large-files
+        name: check for large files
+      - id: check-case-conflict
+        name: check for case conflicts in filenames
+      - id: detect-private-key
+        name: detect private keys in files
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        name: detect secrets in code
+        args:
+          - --baseline
+          - .secrets.baseline
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v4.0.0-alpha.8
+    hooks:
+      - id: prettier
+  - repo: https://github.com/PyCQA/flake8
+    rev: 7.2.0
+    hooks:
+      - id: flake8
+        name: lint Python files
+        args:
+          - --max-line-length=100
+  - repo: https://github.com/PyCQA/isort
+    rev: 6.0.1
+    hooks:
+      - id: isort
+        name: sort Python imports
+        args:
+          - --profile
+          - black
+  - repo: https://github.com/psf/black
+    rev: 25.1.0
+    hooks:
+      - id: black
+        name: format Python files
+        args:
+          - --line-length
+          - "100"
+  - repo: https://github.com/sqlfluff/sqlfluff
+    rev: 3.4.0
+    hooks:
+      - id: sqlfluff-fix
+        name: format SQL files
+        files: \.(sql)$
+        args:
+          - --dialect
+          - postgres
+      - id: sqlfluff-lint
+        name: lint SQL files
+        files: \.(sql)$
+        args:
+          - --dialect
+          - postgres
+  - repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v20.1.5
+    hooks:
+      - id: clang-format
+        name: format C++ files
+        args:
+          - --style=Google
+  - repo: https://github.com/bmorcos/pre-commit-hooks-Cpp
+    rev: 9a5aa38207bf557961110d6a4f7e3a9d352911f9
+    hooks:
+      - id: cpplint
+        name: lint C++ files
+        args:
+          - --linelength=100
+          - --verbose=3
